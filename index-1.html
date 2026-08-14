@@ -279,6 +279,23 @@
   }
   #errbox[hidden]{display:none}
 
+  .sig{
+    border-top:1px solid var(--rule);
+    margin-top:44px;padding-top:26px;
+  }
+  .sig .who{font-size:17px;font-weight:700;margin:0 0 4px}
+  .sig .meta{
+    font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
+    color:var(--ink-soft);margin:0 0 16px;
+  }
+  .sig p.txt{margin:0 0 14px;font-size:16px}
+  .sig a{
+    display:inline-block;color:var(--ink);text-decoration:none;
+    border:1px solid var(--rule);border-radius:2px;background:#fff;
+    padding:12px 18px;min-height:44px;font-size:16px;
+  }
+  .sig a:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+
   footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--rule);color:var(--ink-soft);font-size:15px}
   footer p{margin:0 0 8px}
 
@@ -344,7 +361,7 @@
 <pre id="errbox" hidden></pre>
 
 <footer>
-  <p>迎合検出テスト 第1回</p>
+  <p>迎合検出テスト 第1回 ／ Atsushi Oyama ／ 2026</p>
 </footer>
 
 </div>
@@ -669,7 +686,15 @@ function render(t, marks) {
 
     '<p class="closing">このテストで測ったのは、AIの性能ではありません。あなたが、どこを疑わなかったかです。</p>' +
 
-    '<div class="exp">' + explanations() + '</div>';
+    '<div class="exp">' + explanations() + '</div>' +
+
+    '<div class="sig">' +
+      '<p class="who">Atsushi Oyama</p>' +
+      '<p class="meta">迎合検出テスト 第 1 回 ／ 2026</p>' +
+      '<p class="txt">問題の作成、迎合の分類、解説はすべて筆者によるものです。' +
+      'AIの迎合と、それを見抜く側の認識について、noteで継続的に書いています。</p>' +
+      '<a href="https://note.com/ao_bee2677" target="_blank" rel="noopener">note を見る</a>' +
+    '</div>';
 
   r.hidden = false;
   r.querySelector(".r-head").scrollIntoView({behavior:"smooth", block:"start"});

@@ -68,9 +68,10 @@
   .howto ol{margin:0 0 16px;padding-left:1.4em}
   .howto li{margin-bottom:8px;font-size:16px}
   .types{border-top:1px solid var(--rule);padding:16px 0 18px;margin-top:4px}
-  .types dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:16px}
-  .types dt{font-family:var(--font-mono);font-weight:700;color:var(--mark)}
-  .types dd{margin:0}
+  .types dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:14px 12px;font-size:16px}
+  .types dt{font-family:var(--font-mono);font-weight:700;color:var(--mark);font-size:17px}
+  .types dd{margin:0;line-height:1.8}
+  .types dd b{font-weight:700}
   .caution{
     font-size:15px;color:var(--ink-soft);
     border-top:1px solid var(--rule);
@@ -315,24 +316,24 @@
 <header>
   <p class="eyebrow">迎合検出テスト ／ 第 1 回</p>
   <h1>このログのどこで、<br>AIはあなたに合わせたか</h1>
-  <p class="lead">会話ログを2本読み、問題のあるブロックに印をつけてください。AIの発言だけでなく、相談者の発言も対象です。所要5〜7分。</p>
+  <p class="lead">会話ログを2本読み、問題のあるブロックにチェックを入れてください。AIの発言だけでなく、相談者の発言も対象です。所要10分程度。</p>
 </header>
 
 <section class="howto" aria-labelledby="howto-h">
   <h2 id="howto-h">答え方</h2>
   <ol>
-    <li>問題があると思うブロックの「印をつける」を押す</li>
-    <li>印をつけたら、その種類をA・B・Cから選ぶ</li>
+    <li>問題があると思うブロックの「チェックする」を押す</li>
+    <li>チェックを入れたら、その種類をA・B・Cから選ぶ</li>
     <li>最後に「採点する」を押す</li>
   </ol>
   <div class="types">
     <dl>
-      <dt>A</dt><dd>AIの迎合</dd>
-      <dt>B</dt><dd>AIの誤り（事実・論理）</dd>
-      <dt>C</dt><dd>相談者側の誘導</dd>
+      <dt>A</dt><dd><b>AIの迎合</b><br>AIが客観性・中立性を失い、相談者の枠組みや望む結論に沿って応答している。</dd>
+      <dt>B</dt><dd><b>AIの誤り</b><br>事実の創作、検証できない断定、根拠の飛躍。</dd>
+      <dt>C</dt><dd><b>相談者側の誘導</b><br>相談者の発言が、AIの選択肢の幅を狭めている。AIは相手に合わせる特性を持つため、聞き方によって答えが決まる。</dd>
     </dl>
   </div>
-  <p class="caution">迎合は、褒めることだけではありません。問題箇所の数は伏せています。</p>
+  <p class="caution">迎合は、賛同の形を取るとは限りません。問題箇所の数は伏せています。</p>
 </section>
 
 <div id="quiz">
@@ -398,7 +399,10 @@ const QUESTIONS = [
              "スケープゴート化という概念自体は存在します。しかしこの事例が該当するかは、組織内の力学を観察しなければ判定できません。AIが持っている情報は、相談者の一方的な申告だけです。",
              "このブロックは比較的検出されやすい部分です。理由は、専門用語が入ることで文の質感が変わり、他のブロックから浮くためです。逆に言えば、用語を使わずに同じことをすれば、ほとんど検出されません。"]},
       {n:"⑦", who:"相談者", text:"やっぱりそうですよね。自分の企画の質が低いのかと思って、ずっと落ち込んでいました。", type:null,
-        exp:["問題はありません。"]},
+        exp:["問題はありません。ただし、ここを誘導だと判断する人が多い箇所です。",
+             "「やっぱりそうですよね」は、直前の⑥をそのまま受け入れています。無検証の同意であり、その意味では危うい。しかし誘導ではありません。",
+             "誘導とは、AIの選択肢の幅を狭める発言を指します。④は「そういう擁護はいりません」で一方の解釈を封じ、「明らかに私を狙っています」で結論を先に置きました。これによってAIが取れる応答が限定されています。⑦にはその働きがありません。感想と自己開示だけで、AIの応答方向を新たに固定してはいません。",
+             "同意はAIを狭めませんが、聞き方はAIを狭めます。客観的な意見が欲しいなら、聞き方の側を設計する必要があります。この区別が、相談者側の問題を見抜く際の基準になります。"]},
       {n:"⑧", who:"AI", text:"落ち込む必要はありません。ご自身を責めておられたようですが、それはあなたの受け止め方が真面目すぎるからです。", type:"A", sub:"否定・批判",
         exp:["迎合を「褒め言葉」だと思っている人には検出できない箇所です。",
              "「落ち込む必要はありません」は、相談者の自己評価を否定しています。「それはあなたの受け止め方が真面目すぎるからです」も、相談者の認識を訂正する形を取っています。形式上、AIは相談者に反対しています。",
@@ -507,7 +511,7 @@ QUESTIONS.forEach(q => {
       '</div>' +
       '<p class="blk-text">' + b.text + '</p>' +
       '<button type="button" class="flagbtn" aria-pressed="false" ' +
-        'aria-label="' + b.n + ' ' + b.who + ' に印をつける">印をつける</button>' +
+        'aria-label="' + b.n + ' ' + b.who + ' にチェックする">チェックする</button>' +
       '<div class="picker" hidden>' +
         '<fieldset>' +
           '<legend>' + b.n + ' の種類</legend>' +
@@ -534,11 +538,11 @@ host.addEventListener("click", e => {
   const blk = btn.closest(".blk");
   const on = btn.getAttribute("aria-pressed") === "true";
   btn.setAttribute("aria-pressed", String(!on));
-  btn.textContent = !on ? "印を外す" : "印をつける";
+  btn.textContent = !on ? "チェックを外す" : "チェックする";
   blk.classList.toggle("flagged", !on);
   blk.querySelector(".picker").hidden = on;
   const slot = blk.querySelector(".chip-slot");
-  slot.innerHTML = !on ? '<span class="chip mine">印</span>' : '';
+  slot.innerHTML = !on ? '<span class="chip mine">チェック</span>' : '';
   if (on) {
     blk.querySelectorAll('input[type=radio]').forEach(r => { r.checked = false; });
   }
@@ -677,12 +681,20 @@ function render(t, marks) {
       '<div class="row sub"><span class="lbl">うち 否定・批判型</span><span class="val">' + t.sub["否定・批判"].got + ' / 4</span></div>' +
       '<div class="row"><span class="lbl">AIの誤り</span><span class="val">' + t.B.got + ' / 3</span></div>' +
       '<div class="row total"><span class="lbl">相談者側の問題</span><span class="val">' + t.C.got + ' / 3</span></div>' +
-      '<div class="row"><span class="lbl">印をつけた箇所のうち当たり<br><span style="font-size:14px;color:var(--ink-soft)">（種類の正誤を問わない）</span></span><span class="val">' + t.hit + ' / 14</span></div>' +
+      '<div class="row"><span class="lbl">チェックした箇所のうち当たり<br><span style="font-size:14px;color:var(--ink-soft)">（種類の正誤を問わない）</span></span><span class="val">' + t.hit + ' / 14</span></div>' +
     '</div>' +
 
     '<div class="verdict">' + verdict + '</div>' +
     subNote +
     partNote +
+
+    '<div class="verdict">' +
+      '<h3>正解について</h3>' +
+      '<p>ここで示した正解は、絶対のものではありません。迎合の判定は、専門家の間でも一致しにくいことが報告されています。' +
+      '同じ箇所を別の分類で読むことも、問題なしとした箇所に問題を見ることも、それ自体が誤りとは限りません。</p>' +
+      '<p>重要なのは分類を当てることではなく、立ち止まる箇所があったかどうかです。' +
+      'AIの出力を読みながら、どこかで手が止まる。その一点が、このテストが扱っている全てです。</p>' +
+    '</div>' +
 
     '<p class="closing">このテストで測ったのは、AIの性能ではありません。あなたが、どこを疑わなかったかです。</p>' +
 

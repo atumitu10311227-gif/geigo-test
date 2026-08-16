@@ -485,6 +485,14 @@ const T_START = Date.now();
 
 /* 回答者IDはページを開いた時点で一度だけ作る。採点し直しても変わらない。 */
 const SID = Math.random().toString(36).slice(2, 10);
+
+/* 流入元。URL末尾の ?s=xxx を記録する。付いていなければ空。 */
+const SRC = (function () {
+  try {
+    var m = location.search.match(/[?&]s=([A-Za-z0-9_-]{1,24})/);
+    return m ? m[1] : "";
+  } catch (e) { return ""; }
+})();
 let ATTEMPT = 0;
 
 /* ---------- 描画 ---------- */
@@ -726,6 +734,7 @@ function record(t, marks, score) {
     attempt: ATTEMPT,
     sec: Math.round((Date.now() - T_START) / 1000),
     freq: freqEl ? freqEl.value : "",
+    src: SRC,
     score: score,
     hit: t.hit,
     wrong: t.wrong,

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>AI思考トレーニング</title>
+<link rel="stylesheet" href="/styles.css">
+<script defer src="/data.js"></script>
+<script defer src="/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#content">本文へ移動</a>
+<main id="content">
+<header class="bar"><span>AI接続準備版 0.4.0</span><button class="quiet" id="pauseBtn" type="button" hidden>中断して戻る</button></header>
+<p id="storageStatus" class="storage-note" aria-live="polite"></p>
+<div id="errorBox" role="alert" class="error" hidden><p id="errorText"></p></div>
+<p id="busyText" role="status" hidden></p>
+
+<section id="screen-start">
+<h1 tabindex="-1">AI思考トレーニング</h1>
+<p class="tagline">― 考えるために、AIを使う。―</p>
+<div class="intro">
+<p>これはテストではありません。</p>
+<p>AIとの対話を使った、思考トレーニング用のパイロット版です。</p>
+<p>3つのコースから1つを選び、AIとの対話例を使った簡単な選択問題と、実際のAIとの対話を体験していただきます。</p>
+<p><u>正解を考えすぎず、普段の自分ならどうするかという感覚で進めてください。</u></p>
+</div>
+<p id="connectionStatus" class="status">AI接続の設定を確認しています。</p>
+<details id="notice"><summary>注意事項を見る</summary>
+<p>これは架空の日常場面を使った思考訓練用の試作です。問題解決や専門的な相談、能力診断を目的としたものではありません。訓練効果や日常への転移はまだ検証されていません。</p>
+<p>対話例・AIの回答・フィードバックは、絶対的な正解ではありません。医療・法律・投資などの重要な判断や、緊急の相談には使用しないでください。</p>
+<p>氏名、住所、連絡先、実在する会社・顧客の情報、病歴などの個人情報・機密情報は入力しないでください。</p>
+<p>このアプリは、直近1回の入力・会話・結果を、この端末のブラウザ内に保存します。下の削除ボタンで消せます。共有端末ではほかの利用者から見える可能性があります。</p>
+<p>AIの応答を作るときは、必要な入力と会話を本アプリの通信処理を経由してOpenAIへ送信します。研究者が会話を集約するデータベースや、会話本文を記録する処理はこの版にはありません。</p>
+<p>「端末内保存」は「外部で一切保持されない」という意味ではありません。OpenAIでは通常、監視目的で最長30日程度の記録保持があり、例外やキャッシュ等の扱いもあります。公開先にも通信に伴う記録が残り得ます。端末内の削除ボタンは外部サービス側の記録を削除しません。</p>
+<p>ブラウザのデータ削除・プライベートモード・端末設定等により保存が失われることがあります。このアプリ自身は音声や画像を録音・送信しません。スマホの音声入力は端末やキーボード側の機能です。</p>
+<p>試作段階では利用コードを知る人のみAIを利用できます。利用コードはAIのAPIキーとは別物です。APIキーはこの画面に入力しないでください。</p>
+<p class="small">データ説明の確認日：2026年9月9日。接続時のサービス設定・規定も確認します。</p>
+</details>
+<label class="choice consent"><input id="consent" type="checkbox"> 注意事項を確認しました。AIの応答生成時には入力が外部へ送信されることを理解して進みます。</label>
+<details id="accessDetails"><summary>AI接続の利用コード</summary>
+<label for="accessInput">管理者から渡された利用コード</label>
+<input id="accessInput" type="password" autocomplete="off" spellcheck="false" maxlength="256">
+<p class="small">OpenAIのAPIキーではありません。利用コードはこのページを開いている間だけ保持します。</p>
+<button id="verifyAccess" class="alt" type="button">利用コードを確認する</button>
+<p id="accessStatus" class="small" role="status"></p>
+</details>
+<button id="startBtn" type="button">はじめる</button>
+<button id="continueBtn" class="alt" type="button" hidden>保存した続き・結果を開く</button>
+<div class="recordActions"><button id="exportBtn" class="quiet" type="button" hidden>この端末の記録をファイルに保存</button><button id="deleteBtn" class="quiet" type="button" hidden>この端末の記録を削除</button></div>
+</section>
+
+<section id="screen-course" hidden>
+<h2 tabindex="-1">コースを選んでください</h2>
+<p>コースを選ぶと、その分野についてのAIとの対話例から始まります。</p>
+<button data-course="work" type="button">仕事</button>
+<button data-course="relation" type="button">対人関係</button>
+<button data-course="diet" type="button">ダイエット</button>
+</section>
+
+<section id="screen-choice" hidden>
+<h2 id="scenarioTitle" tabindex="-1"></h2>
+<div id="scenarioText" class="card context"></div>
+<fieldset><legend>普段のあなたなら、このあとどうしますか？</legend>
+<p>正しいと思う答えではなく、普段のあなたに最も近いものを選んでください。</p>
+<div id="choices"></div></fieldset>
+<div id="otherWrap" hidden><label for="other">その他の内容</label><textarea id="other" maxlength="2000"></textarea></div>
+<button id="saveChoice" type="button">回答する</button>
+</section>
+
+<section id="screen-choiceFeedback" hidden>
+<h2 tabindex="-1">あなたの選択について</h2>
+<details class="setting"><summary>最初の場面を確認する</summary><div id="choiceScene"></div></details>
+<p>あなたの選択：<span id="chosenView"></span></p>
+<div id="choiceFeedbackText" class="card feedback"></div>
+<button data-go="question" type="button">次へ</button>
+</section>
+
+<section id="screen-question" hidden>
+<h2 tabindex="-1">AIにもう一つ聞くなら？</h2>
+<div id="questionContext" class="card context"></div>
+<label for="q1">このあとAIにもう一つだけ質問するとしたら、普段のあなたなら何と聞きますか？</label>
+<textarea id="q1" maxlength="2000"></textarea>
+<button id="saveQuestion" type="button">この質問を振り返る</button>
+<button data-go="choiceFeedback" class="alt" type="button">前の説明へ戻る</button>
+</section>
+
+<section id="screen-questionFeedback" hidden>
+<h2 tabindex="-1">あなたの質問を振り返ります</h2>
+<p class="small">ここからは、入力内容をAIが読んで返しています。</p>
+<h3>あなたの質問</h3><p id="questionView" class="card exact"></p>
+<div id="questionFeedbackText" class="card feedback exact"></div>
+<button data-go="dialogintro" type="button">別の場面でAIと対話する</button>
+</section>
+
+<section id="screen-dialogintro" hidden>
+<h2 tabindex="-1">AIとの対話</h2>
+<div id="dialogPrompt" class="card context"></div>
+<p>AIが最初に答えた後、自由にやり取りしてください。最後に、自分の判断を短く残します。</p>
+<p class="small">あなたの送信とAIの返答を1往復として、最大6往復です。3往復後から振り返りへ進めます。最初のAI回答は往復数に含めません。途中の中断はいつでもできます。</p>
+<button id="startChat" type="button">AIとの対話を始める</button>
+</section>
+
+<section id="screen-chat" hidden>
+<h2 id="chatTitle" tabindex="-1"></h2>
+<div id="chatContext" class="card context"></div>
+<p id="turns" class="small"></p>
+<div id="chatBox" class="chat" role="log" aria-label="会話履歴" aria-live="polite" aria-relevant="additions text"></div>
+<div id="chatEntry"><label for="chatInput">AIに送る内容</label><textarea id="chatInput" maxlength="2000"></textarea><button id="sendChat" type="button">送信</button></div>
+<p id="turnLimitText" class="status" hidden>6往復の対話が終わりました。最後の返答を読んでから、振り返りへ進んでください。</p>
+<button id="endChat" class="alt" type="button" hidden>ここで対話を終了して振り返る</button>
+</section>
+
+<section id="screen-judgment" hidden>
+<h2 tabindex="-1">現時点では、どう判断しますか？</h2>
+<div id="judgmentContext" class="card context"></div>
+<fieldset><legend>今の判断に近いもの</legend><div id="judgments"></div></fieldset>
+<div id="judgmentOtherWrap" hidden><label for="judgmentOther">その他の判断</label><textarea id="judgmentOther" maxlength="2000"></textarea></div>
+<label for="reason">そう考えた理由を1〜2文で書いてください。</label>
+<textarea id="reason" maxlength="2000"></textarea>
+<button id="saveJudgment" type="button">対話全体を振り返る</button>
+<button id="backChat" class="alt" type="button">会話を確認する</button>
+</section>
+
+<section id="screen-finalfeedback" hidden>
+<h2 tabindex="-1">今回の対話を振り返ります</h2>
+<div id="finalSections"></div>
+<div id="feedbackClosing" class="card exact"></div>
+<p class="small">AIが会話の記録から作成した振り返りです。解釈を誤る場合があります。内面や思考力を確定するものではありません。</p>
+<details><summary>自分の会話と判断を確認する</summary><div id="reviewTranscript" class="exact"></div></details>
+<button data-go="closing" type="button">最後へ</button>
+</section>
+
+<section id="screen-closing" hidden>
+<h2 tabindex="-1">最後に</h2>
+<p>この訓練で大切なのは、「正しい答え」を覚えることではありません。</p>
+<p>一度立ち止まることで、それまで見えていなかった選択肢に気づくことがあります。</p>
+<div class="card"><p>別の可能性を考える。</p><p>足りない情報を確認する。</p><p>自分の前提を見直す。</p><p>いくつかの考えを比べてみる。</p></div>
+<p>AIは、そのための材料の一つです。</p>
+<p>最後に何を選ぶか、どう判断するかは、自分で決めます。</p>
+<p>このアプリは、日常の中で一度立ち止まり、自分で考え、自分で判断するための力を鍛えることを目的とした訓練用パイロット版です。</p>
+<p class="quote">答えを出すためではなく、考えるためにAIを使う。</p>
+<p>その習慣を、AIとの対話だけでなく、仕事、人間関係、生活の中へつなげていくことを目指しています。</p>
+<button id="finishBtn" type="button">終了する</button>
+<button data-go="finalfeedback" class="alt" type="button">フィードバックをもう一度見る</button>
+</section>
+<footer><p class="small">端末内の記録は「終了する」では消えません。開始画面から削除できます。</p></footer>
+</main>
+</body></html>

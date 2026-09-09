@@ -1,0 +1,23 @@
+{
+  ".env.example": "8a7ea64bbd009cc9ad8889120862cbc0a82521e02986c48e31de417f39b5362f",
+  ".gitignore": "bddaea4261fdc23dba7573d5b52af96b21e4901157ff5d82c4e3f03a9b5f261f",
+  ".vercelignore": "5d3b47515dcd2d4138b118e498395f9ec4b67571ffe0ccfc8d21f0f52e3edb0b",
+  "README.md": "a186524e771f339b60570d2d0d51114ba5f59c462622e1402cc3e33594a92f8a",
+  "api/ai.js": "47398339ff098c699a234380ba9585f90e6e829f608c2d43959e7d6deed0f393",
+  "dev.mjs": "234c7dfa5b6364b7cc0e444e3a5f699a38341226b3e4a2514ed083027efd93de",
+  "package.json": "b60e3a2c193b70ef952dfa5c6b4aca5c73cbed195b587fc016414fdad347792c",
+  "public/app.js": "3491e4ea4f0054360970e53894b9cbd6d6409a2b9e87d2199feda5b93c16a36c",
+  "public/data.js": "b2edbe3d2356fda631c8cf72486ed52ba19f272f26476f0b5a66f92d7753f8ee",
+  "public/index.html": "a193ed3cfc942814688b00a2761c5f684b7f14871fa56ffaaff237e28db7d01b",
+  "public/styles.css": "72b565f420feabd467e691f9b1280d79779c84fc878d6eba737010d989a77ecd",
+  "server/courses.mjs": "526619da52d367f9a3ab8b9413c95d5b354c1d6d304eb85cd6bdde30a384aba1",
+  "server/engine.mjs": "686fc37dc7d0917a2d0b9899e7e4ba24e9d153e23c77c8124b46ae561d0921ff",
+  "server/prompts.mjs": "852fe343da5e589263cd9fefc10d22799b5a93034ae3f163f7ea19f6a4250e7e",
+  "server/reference-v12.txt": "359b6994a47a45bbb06c0410d219d6aea45de31f2a8311fef12fdb2f102fd0d3",
+  "tests/backend.test.mjs": "23c25dffa89b3d81ec167071091f368c8c5e933375e9a7fc055eb336fd8ce2eb",
+  "tests/browser_check.py": "66004f63f6455bf126cef655f730a1b437dd3f83daae1a085e07fbac507cc999",
+  "tests/fixture-server.mjs": "f22792392a71fceda2e2041ebf1c1068131c802daac842d5306f76472f52fb6f",
+  "vercel.json": "eddb615228d2ae12bc4c74187857c6f3c061a33d5da6ef421e962e242771cc7b",
+  "変更点と実装対応.txt": "048eed6ef6a1a5a95a7bbb60281d2e696964d4a35776168a51f5223c5fe656b0",
+  "確認結果.txt": "219090a0c8af26c77e1dc334c84f5c8e6f685bef5c0b12f1ced7457f976b4dd9"
+}
